@@ -7,7 +7,7 @@ using Testcontainers.Azurite;
 
 var logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.File("testcontainers-azuretablestorage.tmp")
+    .WriteTo.File("testcontainers-azureblobstorage.tmp")
     .CreateLogger();
 logger.Information("***** Iniciando testes com Testcontainers + Azure Blob Storage *****");
 
@@ -28,13 +28,13 @@ await azuriteContainer.StartAsync();
 CommandLineHelper.Execute("docker container ls",
     "Containers apos execucao do Testcontainers...");
 
-var connectionStringTableStorage = azuriteContainer.GetConnectionString();
+var connectionStringBlobStorage = azuriteContainer.GetConnectionString();
 const string containerName = "demoarquivos";
-logger.Information($"Connection String = {connectionStringTableStorage}");
+logger.Information($"Connection String = {connectionStringBlobStorage}");
 logger.Information($"Blob Endpoint = {azuriteContainer.GetBlobEndpoint()}");
 logger.Information($"Blob a ser utilizado nos testes = {containerName}");
 
-var blobClient = new BlobServiceClient(connectionStringTableStorage);
+var blobClient = new BlobServiceClient(connectionStringBlobStorage);
 var blobContainerClient = blobClient.CreateBlobContainer(containerName).Value;
 logger.Information($"Blob container {containerName} criado com sucesso!");
 using var httpClient = new HttpClient();
